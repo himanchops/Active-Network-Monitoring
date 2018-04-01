@@ -10,6 +10,7 @@ class Ethernet:
 
         self.dest_mac_addr = convert_mac_address(dest)
         self.src_mac_addr = convert_mac_address(src)
+        #hex to decimal conversion
         self.proto = socket.htons(prototype)
         self.data = raw_data[14:]
         print(self.src_mac_addr, self.dest_mac_addr)
