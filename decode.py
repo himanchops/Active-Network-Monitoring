@@ -16,8 +16,12 @@ class Ethernet:
         print(self.src_mac_addr, self.dest_mac_addr)
 
 
-
 def convert_mac_address(mac_raw):
     byte_str = map('{:02x}'.format, mac_raw)
     mac_addr = ':'.join(byte_str).upper()
     return mac_addr
+
+
+class IPv4:
+    def __init__(self, raw_data):
+        pass
