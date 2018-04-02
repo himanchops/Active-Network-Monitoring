@@ -1,7 +1,6 @@
 import socket
 import sys
-from decode import Ethernet
-from decode import IPv4
+from decode import *
 
 def main():
     conn = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
@@ -15,14 +14,14 @@ def main():
                 #Icmp
                 icmp = ICMP(ipv4.data)
             elif ipv4.proto == 6:
-                #TCP
-                pass
+                #Tcp
+                tcp = TCP(ipv4.data)
             elif ipv4.proto == 17:
-                #UDP
-                pass
+                #Udp
+                upd = UDP(ipv4.data)
             elif ipv4.proto == 88:
-                #IGMP
-                pass
+                #Igmp
+                igmp = IGMP(ipv4.data)
         elif ethernet.proto == 1544:
             #ARP
             pass
