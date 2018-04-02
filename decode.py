@@ -22,7 +22,6 @@ def convert_mac_address(mac_raw):
     return mac_addr
 
 
-
 class IPv4:
 
     def __init__(self, raw_data):
@@ -30,10 +29,19 @@ class IPv4:
         self.version = version_header_length >> 4
         self.header_length = (version_header_length & 15) * 4
         self.ttl, self.proto, src, target = struct.unpack('! 8x B B 2x 4s 4s', raw_data[:20])
-        self.src = self.convert_ip_address(src)
-        self.target = self.convert_ip_address(target)
+        self.src_ip_addr = self.convert_ip_address(src)
+        self.target_ip_addr = self.convert_ip_address(target)
         self.data = raw_data[self.header_length:]
+        print(self.src_ip_addr, self.target_ip_addr)
 
     # Returns properly formatted IPV4 address
     def convert_ip_address(self, addr):
         return '.'.join(map(str, addr))
+
+
+class ICMP:
+
+    def __init__(self, raw_data):
+        self.type, self.code, self.checksum = struct.unpack('! B B H', raw_data[:4])
+        self.data = raw_data[4:]
+        print(self.type)

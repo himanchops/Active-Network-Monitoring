@@ -12,8 +12,8 @@ def main():
             #IPV4
             ipv4 = IPv4(ethernet.data)
             if ipv4.proto == 1:
-                #ICMP
-                pass
+                #Icmp
+                icmp = ICMP(ipv4.data)
             elif ipv4.proto == 6:
                 #TCP
                 pass
