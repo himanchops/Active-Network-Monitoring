@@ -64,7 +64,8 @@ class TCP:
 class UDP:
 
     def __init__(self, raw_data):
-        pass
+        self.src_port, self.dest_port, self.size = struct.unpack('! H H 2x H', raw_data[:8])
+        self.data = raw_data[8:]
 
 class IGMP:
 
