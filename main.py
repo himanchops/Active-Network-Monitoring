@@ -23,14 +23,14 @@ def main():
                 #Igmp
                 igmp = IGMP(ipv4.data)
         elif ethernet.proto == 1544:
-            #ARP
-            pass
+            #Arp
+            arp = ARP(ethernet.data)
         elif ethernet.proto == 13576:
-            #RARP
-            pass
+            #Rarp
+            rarp = RARP(ethernet.data)
         elif ethernet.proto == 56710:
-            #IPV6
-            pass
+            #Ipv6
+            ipv6 = IPv6(ethernet.data)
 
 
 
