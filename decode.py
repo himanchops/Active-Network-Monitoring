@@ -65,9 +65,11 @@ class UDP:
 
     def __init__(self, raw_data):
         self.src_port, self.dest_port, self.size = struct.unpack('! H H 2x H', raw_data[:8])
+        #'! H H H 2x' not sure... in this case 2x is not even needed 
         self.data = raw_data[8:]
 
 class IGMP:
 
     def __init__(self, raw_data):
-        pass
+        self.type, self.max_response_time, self.grp_addr = struct.unpack('! B B 2x 4s', raw_data[:8])
+        self.data = raw_data[8:]
