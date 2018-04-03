@@ -35,11 +35,11 @@ class IPv4:
         print(self.src_ip_addr, self.target_ip_addr)
 
 # Returns properly formatted IPV4 address
-def convert_ip_address(self, addr):
+def convert_ip_address(addr):
     return '.'.join(map(str, addr))
 
 # Returns properly formatted IPV6 address
-def convert_ip6_address(self, addr):
+def convert_ip6_address(addr):
     return '.'.join(map(str, addr))
 
 
@@ -81,8 +81,8 @@ class IGMP:
 class ARP:
 
     def __init__(self, raw_data):
-        self.operation, src_mac_addr, src_ip_addr, dest_mac_addr, dest_ip_addr = struct.unpack('! H 6s 4s
-                6s 4s', raw_data[6:])
+        self.operation, src_mac_addr, src_ip_addr, dest_mac_addr, dest_ip_addr = struct.unpack(
+            '! H 6s 4s 6s 4s', raw_data[6:])
         #operation = 1 => request, operation = 2 =>response/reply
         #considering hardware type=1, hardware length=6
         self.src_mac_addr = convert_mac_address(src_mac_addr)
@@ -94,8 +94,8 @@ class ARP:
 class RARP:
 
     def __init__(self, raw_data):
-        self.operation, src_mac_addr, src_ip_addr, dest_mac_addr, dest_ip_addr = struct.unpack('! H 6s 4s
-                6s 4s', raw_data[6:])
+        self.operation, src_mac_addr, src_ip_addr, dest_mac_addr, dest_ip_addr = struct.unpack(
+            '! H 6s 4s 6s 4s', raw_data[6:])
         #operation = 3 => request, operation = 4 =>response/reply
         #considering hardware type=1, hardware length=6
         self.src_mac_addr = convert_mac_address(src_mac_addr)
@@ -107,7 +107,7 @@ class RARP:
 class IPv6:
 
     def __init__(self, raw_data):
-        src_ip, dest_ip = struct.unpack('! 16s 16s', raw_data[8:]))
+        src_ip, dest_ip = struct.unpack('! 16s 16s', raw_data[8:])
         self.src_ip_addr = convert_ip6_address(src_ip)
         self.dest_ip_addr = convert_ip6_address(dest_ip)
         self.data = raw_data[40:]
