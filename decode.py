@@ -13,7 +13,7 @@ class Ethernet:
         #hex to decimal conversion
         self.proto = socket.htons(prototype)
         self.data = raw_data[14:]
-        print(self.src_mac_addr, self.dest_mac_addr)
+        #print(self.src_mac_addr, self.dest_mac_addr)
 
 
 def convert_mac_address(mac_raw):
@@ -32,7 +32,7 @@ class IPv4:
         self.src_ip_addr = convert_ip_address(src)
         self.target_ip_addr = convert_ip_address(target)
         self.data = raw_data[self.header_length:]
-        print(self.src_ip_addr, self.target_ip_addr)
+        #print(self.src_ip_addr, self.target_ip_addr)
 
 # Returns properly formatted IPV4 address
 def convert_ip_address(addr):
@@ -107,6 +107,7 @@ class RARP:
 class IPv6:
 
     def __init__(self, raw_data):
+        pass
         src_ip, dest_ip = struct.unpack('! 16s 16s', raw_data[8:])
         self.src_ip_addr = convert_ip6_address(src_ip)
         self.dest_ip_addr = convert_ip6_address(dest_ip)
