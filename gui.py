@@ -23,7 +23,6 @@ class MultiListbox(Frame):
         self.lists[0]['yscrollcommand']=sb.set
 
     def _select(self, y):
-        print("a")
         row = self.lists[0].nearest(y)
         self.selection_clear(0, END)
         self.selection_set(row)
@@ -40,7 +39,6 @@ class MultiListbox(Frame):
         return 'break'
 
     def _scroll(self, *args):
-        print("d")
         for l in self.lists:
             l.yview( *args)
 
@@ -87,7 +85,6 @@ class MultiListbox(Frame):
             l.selection_anchor(index)
 
     def selection_clear(self, first, last=None):
-        print("m")
         for l in self.lists:
             l.selection_clear(first, last)
 
@@ -96,6 +93,5 @@ class MultiListbox(Frame):
         return self.lists[0].selection_includes(index)
 
     def selection_set(self, first, last=None):
-        print("o")
         for l in self.lists:
             l.selection_set(first, last)

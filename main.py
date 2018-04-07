@@ -54,7 +54,7 @@ def main():
     t1.start()
     tk = Tk()
     Label(tk, text='MultiListbox').pack()
-    mlb = MultiListbox(tk, (('No.', 5),('Destination', 40), ('Source', 20), ('Protocol', 10)))
+    mlb = MultiListbox(tk, (('No.', 5),('Destination', 20), ('Source', 20), ('Protocol', 10)))
     mlb.pack(expand=YES, fill=BOTH)
     tk.protocol("WM_DELETE_WINDOW",on_closing)
     i = 0
