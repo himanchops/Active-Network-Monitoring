@@ -29,12 +29,10 @@ class MultiListbox(Frame):
         return 'break'
 
     def _button2(self, x, y):
-        print("b")
         for l in self.lists: l.scan_mark(x, y)
         return 'break'
 
     def _b2motion(self, x, y):
-        print("c")
         for l in self.lists: l.scan_dragto(x, y)
         return 'break'
 
@@ -43,16 +41,13 @@ class MultiListbox(Frame):
             l.yview( *args)
 
     def curselection(self):
-        print("e")
         return self.lists[0].curselection()
 
     def delete(self, first, last=None):
-        print("f")
         for l in self.lists:
             l.delete(first, last)
 
     def get(self, first, last=None):
-        print("g")
         result = []
         for l in self.lists:
             result.append(l.get(first,last))
@@ -60,7 +55,6 @@ class MultiListbox(Frame):
         return result
 
     def index(self, index):
-        print("h")
         self.lists[0].index(index)
 
     def insert(self, index, *elements):
@@ -71,16 +65,13 @@ class MultiListbox(Frame):
                 i = i + 1
 
     def size(self):
-        print("j")
         return self.lists[0].size()
 
     def see(self, index):
-        print("k")
         for l in self.lists:
             l.see(index)
 
     def selection_anchor(self, index):
-        print("l")
         for l in self.lists:
             l.selection_anchor(index)
 
@@ -89,7 +80,6 @@ class MultiListbox(Frame):
             l.selection_clear(first, last)
 
     def selection_includes(self, index):
-        print("n")
         return self.lists[0].selection_includes(index)
 
     def selection_set(self, first, last=None):
