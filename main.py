@@ -5,9 +5,8 @@ from gui import *
 import os
 import threading
 import time
+from globalvars import thelist
 
-
-thelist = []
 finish = threading.Event()
 
 def fillin():
@@ -51,9 +50,9 @@ def fillin():
             print(len(ethernet.data))
             print("not enough bytes")
             finish.set()
-        thelist.append((i, ethernet.dest_mac_addr, ethernet.src_mac_addr,ethernet.proto))
+        thelist.append((i, ethernet.dest_mac_addr,
+            ethernet.src_mac_addr,ethernet.proto, raw_data))
         i += 1
-
 
 def main():
     tk = Tk()

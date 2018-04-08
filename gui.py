@@ -1,11 +1,13 @@
 from tkinter import *
+from globalvars import thelist
 
 class MultiListbox(Frame):
     def __init__(self, master, lists):
         Frame.__init__(self, master)
         self.lists = []
         for l,w in lists:
-            frame = Frame(self); frame.pack(side=LEFT, expand=YES, fill=BOTH)
+            frame = Frame(self)
+            frame.pack(side=LEFT, expand=YES, fill=BOTH)
             Label(frame, text=l, borderwidth=1, relief=RAISED).pack(fill=X)
             lb = Listbox(frame, width=w, borderwidth=0, selectborderwidth=0,
                     relief=FLAT, exportselection=FALSE)
@@ -24,6 +26,7 @@ class MultiListbox(Frame):
 
     def _select(self, y):
         row = self.lists[0].nearest(y)
+        print(thelist[row][4])
         self.selection_clear(0, END)
         self.selection_set(row)
         return 'break'
