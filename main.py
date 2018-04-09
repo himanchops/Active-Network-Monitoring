@@ -62,44 +62,71 @@ def fillin():
 
 def main():
     tk = Tk()
-    Label(tk, text='Active Network Monitoring').pack()
+    tk.title("Active Network Monitoring")
+    tk.geometry("200x120")
     tk.protocol("WM_DELETE_WINDOW",lambda:finish.is_set())
-    begin = IntVar()
-    paused = IntVar()
-    bttns = Frame()
-    bttns.pack()
-    mlb = MultiListbox(tk, (('No.', 5),('Destination', 20), ('Source', 20), ('Protocol', 10)))
-    mlb.pack(expand=YES, fill=BOTH)
-    i = 0
-    button1 = Button(bttns,text="Start", fg="green", command=lambda: begin.set(1))
-    button1.pack(side=LEFT)
-    tk.update()
-    button1.wait_variable(begin)
-    button2_text = StringVar()
-    button2_text.set("Pause")
-    button2 = Button(bttns,textvariable=button2_text, fg="yellow",command=lambda:
-            paused.set(0) if paused.get() else paused.set(1))
-    button2.pack(side=LEFT)
-    button3 = Button(bttns,text="save", fg="yellow",command=lambda:
-            saving.clear() if saving.is_set() else saving.set())
-    button3.pack(side=LEFT)
-    button4 = Button(bttns,text="Quit", fg="red",command=lambda: finish.set())
-    button4.pack(side=LEFT)
-    tk.update()
-    t1 = threading.Thread(target=fillin)
-    t1.start()
-    while not finish.is_set():
-        try:
-            mlb.insert(END, (thelist[i][0], thelist[i][1], thelist[i][2], thelist[i][3]))
-            tk.update()
-            i += 1
-            if paused.get():
-                button2.wait_variable(paused)
-                i = len(thelist)
-        except:
-            pass
+
+    options = Frame()
+    options.pack(anchor=CENTER)
+    choice = IntVar()
+    button1 = Button(options,text="Send Packets", command=lambda: choice.set(1))
+    button2 = Button(options,text="Read Packets", command=lambda: choice.set(2))
+    button3 = Button(options,text="Quit", fg="red",command=lambda: choice.set(0))
+    button1.pack()
+    button2.pack()
+    button3.pack()
+    
+    button1.wait_variable(choice)
+    options.destroy()
+
+    if(choice.get() == 1):
+        options = Frame()
+        options.pack()
+        button1 = Button(options,text="TCP", command=lambda: choice.set(0))
+        button2 = Button(options,text="UDP", command=lambda: choice.set(1))
+        button3 = Button(options,text="ICMP",command=lambda: choice.set(2))
+        button1.pack(side=TOP)
+        button2.pack(side=TOP)
+        button3.pack(side=BOTTOM)
+
+        button1.wait_variable(choice)
+        options.destroy()
+
+    elif(choice.get() == 2):
+        tk.geometry("500x500")
+        bttns = Frame()
+        bttns.pack()
+        paused = IntVar()
+        mlb = MultiListbox(tk, (('No.', 5),('Destination', 20), ('Source', 20), ('Protocol', 10)))
+        mlb.pack(expand=YES, fill=BOTH)
+        i = 0
+        button1 = Button(bttns,text="Start", fg="green", command=lambda: paused.set(0))
+        button1.pack(side=LEFT)
+        button2_text = StringVar()
+        button2_text.set("Pause")
+        button2 = Button(bttns,textvariable=button2_text, fg="yellow", command =
+                lambda: paused.set(1))
+        button2.pack(side=LEFT)
+        button3 = Button(bttns,text="save", fg="blue",command=lambda:
+                saving.clear() if saving.is_set() else saving.set())
+        button3.pack(side=LEFT)
+        button4 = Button(bttns,text="Quit", fg="red",command=lambda: finish.set())
+        button4.pack(side=LEFT)
+        tk.update()
+        t1 = threading.Thread(target=fillin)
+        t1.start()
+        while not finish.is_set():
+            try:
+                mlb.insert(END, (thelist[i][0], thelist[i][1], thelist[i][2], thelist[i][3]))
+                tk.update()
+                i += 1
+                if paused.get():
+                    button2.wait_variable(paused)
+                    i = len(thelist)
+            except:
+                pass
+        t1.join()
     tk.destroy()
-    t1.join()
 
 if __name__ == '__main__':
     #cProfile.run('main()')
