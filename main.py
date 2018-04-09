@@ -6,10 +6,13 @@ import os
 import threading
 import time
 from globalvars import thelist
+from pcap import Pcap
 
 finish = threading.Event()
+saving = threading.Event()
 
 def fillin():
+    pcap = Pcap("capture.pcap")
     if os.geteuid() != 0:
         print("Root privileges needed")
         finish.set()
@@ -52,13 +55,17 @@ def fillin():
             finish.set()
         thelist.append((i, ethernet.dest_mac_addr,
             ethernet.src_mac_addr,ethernet.proto, raw_data))
+        if saving.is_set():
+            pcap.write(raw_data)
         i += 1
+    pcap.close()
 
 def main():
     tk = Tk()
     Label(tk, text='Active Network Monitoring').pack()
     tk.protocol("WM_DELETE_WINDOW",lambda:finish.is_set())
     begin = IntVar()
+    paused = IntVar()
     bttns = Frame()
     bttns.pack()
     mlb = MultiListbox(tk, (('No.', 5),('Destination', 20), ('Source', 20), ('Protocol', 10)))
@@ -68,8 +75,16 @@ def main():
     button1.pack(side=LEFT)
     tk.update()
     button1.wait_variable(begin)
-    button2 = Button(bttns,text="Quit", fg="red",command=lambda: finish.set())
+    button2_text = StringVar()
+    button2_text.set("Pause")
+    button2 = Button(bttns,textvariable=button2_text, fg="yellow",command=lambda:
+            paused.set(0) if paused.get() else paused.set(1))
     button2.pack(side=LEFT)
+    button3 = Button(bttns,text="save", fg="yellow",command=lambda:
+            saving.clear() if saving.is_set() else saving.set())
+    button3.pack(side=LEFT)
+    button4 = Button(bttns,text="Quit", fg="red",command=lambda: finish.set())
+    button4.pack(side=LEFT)
     tk.update()
     t1 = threading.Thread(target=fillin)
     t1.start()
@@ -78,7 +93,9 @@ def main():
             mlb.insert(END, (thelist[i][0], thelist[i][1], thelist[i][2], thelist[i][3]))
             tk.update()
             i += 1
-            time.sleep(0.65)
+            if paused.get():
+                button2.wait_variable(paused)
+                i = len(thelist)
         except:
             pass
     tk.destroy()
