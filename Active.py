@@ -9,7 +9,7 @@ def ICMPpacket(source, destination, time, t, raw_load):
 def TCPpacket(destination, sp, dp) :
 	packet = IP(dst=destination)/TCP(sport=sp, dport=dp)
 	send(packet)
-	packet.show()
+#	packet.show()
 	return packet
 
 def UDPpacket(destination, sp, dp):
@@ -20,6 +20,13 @@ def UDPpacket(destination, sp, dp):
 
 def TraceRoute(destination, m):
 	traceroute([destination], maxttl = m)
+
+def ARPpacket(hwsrcentry, pdstentry):
+	packet = Ether(dst='ff:ff:ff:ff:ff:ff', src=hwsrcentry)/ARP(hwsrc=hwsrcentry, pdst=pdstentry)
+	send(packet)
+	packet.show()
+	return packet
+
 
 #sr1(IP(dst="10.1.99.2")/UDP()/DNS(rd=1,qd=DNSQR(qname="citrix.com",qtype= "NS")))
 #output=sr(IP(dst='google.com')/ICMP())
