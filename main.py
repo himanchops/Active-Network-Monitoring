@@ -15,9 +15,14 @@ saving = threading.Event()
 
 def fillin():
     dictionary = {8:"ipv4",1544:"arp",13576:"rarp",56710:"ipv6"}
-    pcap = Pcap("capture.pcap")
+    try:
+        pcap = Pcap("capture.pcap")
+    except:
+        tkMessageBox.showerror("Error","Operation not permitted, Root Privileges needed!")
+        
     if os.geteuid() != 0:
         print("Root privileges needed")
+        tkMessageBox.showerror("Error","Operation not permitted, Root Privileges needed!")
         finish.set()
     i = 1
     conn = socket.socket(socket.AF_PACKET, socket.SOCK_RAW, socket.ntohs(3))
@@ -94,6 +99,13 @@ def main():
 
     #SEND PACKETS
     if(choice.get() == 1):
+        def click_quit():
+            options.destroy()
+            tk.destroy()
+            exit()
+        if os.geteuid() != 0:
+           tkMessageBox.showerror("Error","Operation not permitted, Root Privileges needed!")
+           click_quit()
         options = Frame()
         tk.geometry("1200x800")
         options.pack()
@@ -113,10 +125,6 @@ def main():
             main()
 
         Button(options, text="BACK", width=25, command=click_back).pack(fill=X, side=TOP)
-        def click_quit():
-            options.destroy()
-            tk.destroy()
-            exit()
         Button(options, text="QUIT", width=25, command=click_quit).pack(fill=X, side=BOTTOM)
         button1.wait_variable(choice)
         options.destroy()
@@ -155,12 +163,17 @@ def main():
                packet = TCPpacket(d,int(sp),int(dp))
                output.insert(END, packet.summary()+'\n')
            buttons = Button(tcpwindow, text="Submit", width=6, command=click).grid(row=4,column=1,sticky=W)
+           def click_back():
+               options.destroy()
+               tk.destroy()
+               main()
+           Button(tcpwindow, text="BACK", width=6, command=click_back).grid(row=10,column=5,sticky=W)
 
            def click_quit():
                tcpwindow.destroy()
                tk.destroy()
                exit()
-           Button(tcpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=5,sticky=W)
+           Button(tcpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=6,sticky=W)
            tcpwindow.mainloop()
 
 	#SENDING UDP PACKET
@@ -195,12 +208,17 @@ def main():
                packet = UDPpacket(d,int(sp),int(dp))
                output.insert(END, packet.summary()+'\n')
            buttons = Button(udpwindow, text="Submit", width=6, command=click).grid(row=4,column=1,sticky=W)
-           
+
+           def click_back():
+               options.destroy()
+               tk.destroy()
+               main()
+           Button(udpwindow, text="BACK", width=6, command=click_back).grid(row=10,column=5,sticky=W)           
            def click_quit():
                udpwindow.destroy()
                tk.destroy()
                exit()
-           Button(udpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=5,sticky=W)
+           Button(udpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=6,sticky=W)
            udpwindow.mainloop()
 
 	#SENDING ICMP PACKETS
@@ -246,11 +264,17 @@ def main():
                output.insert(END, packet.summary()+'\n')
            Button(icmpwindow, text="Submit", width=6, command=click).grid(row=6,column=1,sticky=W)
 
+           def click_back():
+               options.destroy()
+               tk.destroy()
+               main()
+           Button(icmpwindow, text="BACK", width=6, command=click_back).grid(row=10,column=5,sticky=W)
+
            def click_quit():
                icmpwindow.destroy()
                tk.destroy()
                exit()
-           Button(icmpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=5,sticky=W)
+           Button(icmpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=6,sticky=W)
            icmpwindow.mainloop()
 
         options.destroy()
@@ -281,11 +305,16 @@ def main():
                output.insert(END, packet.summary()+'\n')
            Button(arpwindow, text="Submit", width=6, command=click).grid(row=3,column=1,sticky=W)
 
+           def click_back():
+               options.destroy()
+               tk.destroy()
+               main()
+           Button(arpwindow, text="BACK", width=6, command=click_back).grid(row=10,column=5,sticky=W)
            def click_quit():
                arpwindow.destroy()
                tk.destroy()
                exit()
-           Button(arpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=5,sticky=W)
+           Button(arpwindow, text="QUIT", width=6, command=click_quit).grid(row=10,column=6,sticky=W)
            arpwindow.mainloop()
 
 	#READ PACKETS
