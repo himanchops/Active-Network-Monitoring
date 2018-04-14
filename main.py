@@ -109,6 +109,7 @@ def main():
 
         def click_back():
             options.destroy()
+            tk.destroy()
             main()
 
         Button(options, text="BACK", width=25, command=click_back).pack(fill=X, side=TOP)
