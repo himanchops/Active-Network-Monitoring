@@ -107,6 +107,11 @@ def main():
         button1.pack(fill=X, side=TOP)
         button2.pack(fill=X, side=TOP)
 
+        def click_back():
+            options.destroy()
+            main()
+
+        Button(options, text="BACK", width=25, command=click_back).pack(fill=X, side=TOP)
         def click_quit():
             options.destroy()
             tk.destroy()
@@ -135,9 +140,18 @@ def main():
 
            def click():
                d = destination.get()
-               sp = int(sport.get())
-               dp = int(dport.get())
-               packet = TCPpacket(d,sp,dp)
+               if not valid_ip(d):
+                   tkMessageBox.showerror("Error","Enter valid Destination IP")
+                   return
+               sp = sport.get()
+               if not valid_port(sp):
+                   tkMessageBox.showerror("Error","Enter valid Source-Port Number")
+                   return
+               dp = dport.get()
+               if not valid_port(dp):
+                   tkMessageBox.showerror("Error","Enter valid Destination-Port Number")
+                   return
+               packet = TCPpacket(d,int(sp),int(dp))
                output.insert(END, packet.summary()+'\n')
            buttons = Button(tcpwindow, text="Submit", width=6, command=click).grid(row=4,column=1,sticky=W)
 
@@ -166,9 +180,18 @@ def main():
            output.grid(row=5, column = 0, sticky = W)
            def click():
                d = destination.get()
-               sp = int(sport.get())
-               dp = int(dport.get())
-               packet = UDPpacket(d,sp,dp)
+               if not valid_ip(d):
+                   tkMessageBox.showerror("Error","Enter valid Destination IP")
+                   return
+               sp = sport.get()
+               if not valid_port(sp):
+                   tkMessageBox.showerror("Error","Enter valid Source-Port Number")
+                   return
+               dp = dport.get()
+               if not valid_port(dp):
+                   tkMessageBox.showerror("Error","Enter valid Destination-Port Number")
+                   return
+               packet = UDPpacket(d,int(sp),int(dp))
                output.insert(END, packet.summary()+'\n')
            buttons = Button(udpwindow, text="Submit", width=6, command=click).grid(row=4,column=1,sticky=W)
            
@@ -204,11 +227,21 @@ def main():
 
            def click():
                source = sourceentry.get()
+               if not valid_ip(source):
+                   tkMessageBox.showerror("Error","Enter valid Destination IP")
+                   return
                destination = destinationentry.get()
+               if not valid_ip(destination):
+                   tkMessageBox.showerror("Error","Enter valid Destination IP")
+                   return
                load = loadentry.get()
-               ttl = int(ttlentry.get())
-               types = int(typeentry.get())
-               packet = ICMPpacket(source, destination, ttl, types, load)
+               ttl = ttlentry.get()
+               if not ttl.isdigit():
+                   return
+               types = typeentry.get()
+               if not types.isdigit():
+                   return
+               packet = ICMPpacket(source, destination, int(ttl), int(types), load)
                output.insert(END, packet.summary()+'\n')
            Button(icmpwindow, text="Submit", width=6, command=click).grid(row=6,column=1,sticky=W)
 
@@ -236,7 +269,13 @@ def main():
            output.grid(row=4, column = 0, sticky = W)
            def click():
                source = sourceentry.get()
+               if not valid_hw(source):
+                   tkMessageBox.showerror("Error","Enter valid Source MAC Address")
+                   return
                destination = destinationentry.get()
+               if not valid_ip(destination):
+                   tkMessageBox.showerror("Error","Enter valid Destination IP")
+                   return
                packet = ARPpacket(source, destination)
                output.insert(END, packet.summary()+'\n')
            Button(arpwindow, text="Submit", width=6, command=click).grid(row=3,column=1,sticky=W)
